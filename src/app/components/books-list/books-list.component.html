@@ -1,3 +1,33 @@
+<div class="row justify-content-center mt-5">
+  <div class="col-md-4">
+      <form [formGroup]="bookForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <label>Name</label>
+          <input class="form-control" type="text" formControlName="name" required>
+        </div>
+
+        <div class="form-group">
+          <label>Price</label>
+          <input class="form-control" type="text" formControlName="price" required>
+        </div>
+
+        <div class="form-group">
+          <label>Description</label>
+          <input class="form-control" type="text" formControlName="brand" required>
+        </div>
+
+        <div class="form-group">
+          <button class="btn btn-primary btn-block" type="submit">Add Book</button>
+        </div>
+        <div class="form-group">
+          <button class="btn btn-primary btn-block" (click)="$event.preventDefault();updateUser()">Update Book</button>
+        </div>
+      </form>
+  </div>
+</div>
+
+
+
 <div class="container">
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
       <h2 class="h2">Books List</h2>
@@ -20,9 +50,10 @@
             <td>{{book.price}}</td>
             <td>{{book.brand}}</td>
             <td class="text-center">
-              <button class="btn btn-sm btn-primary" routerLink="/edit-book/{{book._id}}">Edit</button>
+              <button class="btn btn-sm btn-primary" (click)="loadArticleToEdit(book._id)">Edit</button>
             <button class="btn btn-sm btn-danger" (click)="delete(book._id, i)">Delete</button>  
           </tr>
+          
         </tbody>
       </table>
     </div>

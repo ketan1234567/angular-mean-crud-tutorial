@@ -36,8 +36,8 @@ export class CrudService {
     )
   }
   //Update Book
-  updatebook(id:any,data:any){
-    let api_url=`${this.Rest_api}/update-book/${id}`;
+  updatebook(data:any){
+    let api_url=`${this.Rest_api}/update-book/${data.id}`;
     return  this.httpClient
     .put(api_url,data,{headers:this.httpHeaders}).pipe(catchError(this.handleError))
     .pipe(catchError(this.handleError));

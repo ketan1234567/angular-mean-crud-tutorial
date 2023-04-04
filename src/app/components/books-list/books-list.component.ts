@@ -1,5 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, NgZone, OnInit, ViewChild } from '@angular/core';
 import { CrudService } from 'src/app/service/crud.service';
+import { AddBookComponent } from '../add-book/add-book.component';
+import { FormBuilder } from '@angular/forms';
+import { Router } from '@angular/router';
+
+
 
 @Component({
   selector: 'app-books-list',
@@ -8,11 +13,32 @@ import { CrudService } from 'src/app/service/crud.service';
 })
 export class BooksListComponent implements OnInit {
   books:any=[];
+  articleIdToUpdate:any
+  constructor(private crudService:CrudService,
+    public formBuilder: FormBuilder,
+    private router: Router,
+    private ngZone: NgZone
+    
+    ){}
+  bookForm=this.formBuilder.group({
+    id:[''],
+    name:[''],
+    price:[''],
+    brand:['']
+  })
 
-  constructor(private crudService:CrudService){}
-  ngOnInit(): void {
+    onSubmit() {
+      this.crudService.addbook(this.bookForm.value)
+      .subscribe(() => {
+          console.log('Data added successfully!')
+          this.ngZone.run(() => this.router.navigateByUrl('/books-list'))
+        }, (err) => {
+          console.log(err);
+      });
+    
+  }
+  ngOnInit() {
    this.crudService.GetBooks().subscribe(res=>{
-    console.log(res);
     this.books=res;
    })
   }
@@ -25,5 +51,25 @@ export class BooksListComponent implements OnInit {
     } 
       
   }
+  loadArticleToEdit(articleId: any) {
+    this.crudService.GetBook(articleId)
+      .subscribe(article => {
+        console.log(article);
+        this.articleIdToUpdate = article._id;
+        console.log(this.articleIdToUpdate);
+        
+        this.bookForm.setValue({ id:this.articleIdToUpdate, name:article.name, price:article.price,brand:article.brand});
+        //this.getAllArticles();
+      },
+        );
+  }
+  updateUser() {
+    if(window.confirm('Do you want to Update ')) {
+      this.crudService.updatebook(this.bookForm.value).subscribe(item => {
+        console.log(item);
+    })
+  }
 
+
+  }
 }
