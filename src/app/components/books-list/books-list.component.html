@@ -3,9 +3,11 @@
       <form [formGroup]="bookForm" (ngSubmit)="onSubmit()">
         <div class="form-group">
           <label>Name</label>
-          <input class="form-control" type="text" formControlName="name" required>
-        </div>
-
+          <input class="form-control" type="text" formControlName="name" required >
+          <div *ngIf="bookForm.get('name')?.hasError('required')" ngClass="error" style="color:red;">
+            Enter  name.
+          </div>
+        </div>    
         <div class="form-group">
           <label>Price</label>
           <input class="form-control" type="text" formControlName="price" required>
@@ -15,20 +17,24 @@
           <label>Description</label>
           <input class="form-control" type="text" formControlName="brand" required>
         </div>
-
+        <br>
+<div style="display: flex; margin:0px; justify-content:space-between;">
         <div class="form-group">
           <button class="btn btn-primary btn-block" type="submit">Add Book</button>
         </div>
+        <br>
         <div class="form-group">
           <button class="btn btn-primary btn-block" (click)="$event.preventDefault();updateUser()">Update Book</button>
         </div>
+      </div>
       </form>
   </div>
 </div>
 
 
 
-<div class="container">
+
+<div class="container"  >
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
       <h2 class="h2">Books List</h2>
     </div>
@@ -51,9 +57,10 @@
             <td>{{book.brand}}</td>
             <td class="text-center">
               <button class="btn btn-sm btn-primary" (click)="loadArticleToEdit(book._id)">Edit</button>
+              &nbsp;
             <button class="btn btn-sm btn-danger" (click)="delete(book._id, i)">Delete</button>  
           </tr>
-          
+
         </tbody>
       </table>
     </div>

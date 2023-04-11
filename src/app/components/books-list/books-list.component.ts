@@ -14,12 +14,18 @@ import { Router } from '@angular/router';
 export class BooksListComponent implements OnInit {
   books:any=[];
   articleIdToUpdate:any
+ 
   constructor(private crudService:CrudService,
     public formBuilder: FormBuilder,
     private router: Router,
     private ngZone: NgZone
     
     ){}
+    ngOnInit():void {
+      this.crudService.GetBooks().subscribe(res=>{
+       this.books=res})
+      }
+      
   bookForm=this.formBuilder.group({
     id:[''],
     name:[''],
@@ -28,6 +34,7 @@ export class BooksListComponent implements OnInit {
   })
 
     onSubmit() {
+
       this.crudService.addbook(this.bookForm.value)
       .subscribe(() => {
           console.log('Data added successfully!')
@@ -37,11 +44,8 @@ export class BooksListComponent implements OnInit {
       });
     
   }
-  ngOnInit() {
-   this.crudService.GetBooks().subscribe(res=>{
-    this.books=res;
-   })
-  }
+
+
   delete(id:any,i:any){
     console.log(id);
     if(window.confirm('Do you want to go ahead?')) {
